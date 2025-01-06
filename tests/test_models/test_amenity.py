@@ -1,33 +1,23 @@
 #!/usr/bin/python3
-"""Test Amenity Class"""
-import unittest
+"""Test module for the Amenity model."""
+import os
+
+from tests.test_models.test_base_model import TestBasemodel
 from models.amenity import Amenity
-from models.base_model import BaseModel
 
 
-class TestAmenity(unittest.TestCase):
-    """Test cases for Amenity class"""
+class TestAmenity(TestBasemodel):
+    """Test class for the Amenity model."""
+    def __init__(self, *args, **kwargs):
+        """Initializes the test class for Amenity."""
+        super().__init__(*args, **kwargs)
+        self.name = "Amenity"
+        self.value = Amenity
 
-    def setUp(self):
-        """Set up test cases"""
-        self.amenity = Amenity()
-
-    def test_inheritance(self):
-        """Test inheritance"""
-        self.assertIsInstance(self.amenity, BaseModel)
-        self.assertIsInstance(self.amenity, Amenity)
-
-    def test_attributes(self):
-        """Test attributes"""
-        self.assertTrue(hasattr(self.amenity, 'name'))
-        self.assertEqual(self.amenity.name, "")
-
-    def test_to_dict(self):
-        """Test to_dict method"""
-        self.amenity.name = "WiFi"
-        amenity_dict = self.amenity.to_dict()
-        self.assertEqual(amenity_dict['name'], "WiFi")
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_name2(self):
+        """Checks the type of the name attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )

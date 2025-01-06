@@ -1,13 +1,15 @@
 #!/usr/bin/python3
-"""Contains Amenity class"""
-from models.base_model import BaseModel, Base
+"""Module defining the Amenity class for the HBNB project."""
+import os
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+from models.base_model import BaseModel, Base
+
 
 class Amenity(BaseModel, Base):
-    """Amenity class"""
+    """Class representing an amenity entry."""
     __tablename__ = 'amenities'
-    name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary="place_amenity",
-                                 viewonly=False)
+    name = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''

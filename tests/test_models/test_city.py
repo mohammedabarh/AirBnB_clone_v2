@@ -1,37 +1,31 @@
 #!/usr/bin/python3
-"""Test City Class"""
-import unittest
+"""Test module for the City model."""
+import os
+
 from models.city import City
-from models.base_model import BaseModel
+from tests.test_models.test_base_model import TestBasemodel
 
 
-class TestCity(unittest.TestCase):
-    """Test cases for City class"""
+class TestCity(TestBasemodel):
+    """Test class for the City model."""
+    def __init__(self, *args, **kwargs):
+        """Initializes the test class for City."""
+        super().__init__(*args, **kwargs)
+        self.name = "City"
+        self.value = City
 
-    def setUp(self):
-        """Set up test cases"""
-        self.city = City()
+    def test_state_id(self):
+        """Checks the type of the state_id attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.state_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_inheritance(self):
-        """Test inheritance"""
-        self.assertIsInstance(self.city, BaseModel)
-        self.assertIsInstance(self.city, City)
-
-    def test_attributes(self):
-        """Test attributes"""
-        self.assertTrue(hasattr(self.city, 'state_id'))
-        self.assertTrue(hasattr(self.city, 'name'))
-        self.assertEqual(self.city.state_id, "")
-        self.assertEqual(self.city.name, "")
-
-    def test_to_dict(self):
-        """Test to_dict method"""
-        self.city.name = "San Francisco"
-        self.city.state_id = "CA"
-        city_dict = self.city.to_dict()
-        self.assertEqual(city_dict['name'], "San Francisco")
-        self.assertEqual(city_dict['state_id'], "CA")
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_name(self):
+        """Checks the type of the name attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )

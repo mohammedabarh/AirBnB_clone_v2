@@ -1,14 +1,12 @@
 #!/usr/bin/python3
-"""Initialize the models package"""
-from os import getenv
+"""This module creates an instance of the storage engine."""
+import os
 
-storage_type = getenv("HBNB_TYPE_STORAGE")
+from models.engine.db_storage import DBStorage
+from models.engine.file_storage import FileStorage
 
-if storage_type == "db":
-    from models.engine.db_storage import DBStorage
-    storage = DBStorage()
-else:
-    from models.engine.file_storage import FileStorage
-    storage = FileStorage()
-
+storage = DBStorage() if os.getenv(
+    'HBNB_TYPE_STORAGE') == 'db' else FileStorage()
+"""Singleton instance of the storage engine for model management.
+"""
 storage.reload()

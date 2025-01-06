@@ -1,41 +1,48 @@
 #!/usr/bin/python3
-"""Test User Class"""
-import unittest
+"""Test module for the User model."""
+import os
+from sqlalchemy import Column
+
+from tests.test_models.test_base_model import TestBasemodel
 from models.user import User
-from models.base_model import BaseModel
 
 
-class TestUser(unittest.TestCase):
-    """Test cases for User class"""
+class TestUser(TestBasemodel):
+    """Test class for the User model."""
+    def __init__(self, *args, **kwargs):
+        """Initializes the test class for User."""
+        super().__init__(*args, **kwargs)
+        self.name = "User"
+        self.value = User
 
-    def setUp(self):
-        """Set up test cases"""
-        self.user = User()
+    def test_first_name(self):
+        """Checks the type of the first_name attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.first_name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_inheritance(self):
-        """Test inheritance"""
-        self.assertIsInstance(self.user, BaseModel)
-        self.assertIsInstance(self.user, User)
+    def test_last_name(self):
+        """Checks the type of the last_name attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.last_name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_attributes(self):
-        """Test attributes"""
-        self.assertTrue(hasattr(self.user, 'email'))
-        self.assertTrue(hasattr(self.user, 'password'))
-        self.assertTrue(hasattr(self.user, 'first_name'))
-        self.assertTrue(hasattr(self.user, 'last_name'))
-        self.assertEqual(self.user.email, "")
-        self.assertEqual(self.user.password, "")
-        self.assertEqual(self.user.first_name, "")
-        self.assertEqual(self.user.last_name, "")
+    def test_email(self):
+        """Checks the type of the email attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.email),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_to_dict(self):
-        """Test to_dict method"""
-        self.user.email = "test@test.com"
-        self.user.password = "test123"
-        user_dict = self.user.to_dict()
-        self.assertEqual(user_dict['email'], "test@test.com")
-        self.assertEqual(user_dict['password'], "test123")
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_password(self):
+        """Checks the type of the password attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.password),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )

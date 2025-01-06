@@ -1,45 +1,100 @@
 #!/usr/bin/python3
-"""Test Place Class"""
-import unittest
+"""Test module for the Place model."""
+import os
+
+from tests.test_models.test_base_model import TestBasemodel
 from models.place import Place
-from models.base_model import BaseModel
 
 
-class TestPlace(unittest.TestCase):
-    """Test cases for Place class"""
+class TestPlace(TestBasemodel):
+    """Test class for the Place model."""
+    def __init__(self, *args, **kwargs):
+        """Initializes the test class for Place."""
+        super().__init__(*args, **kwargs)
+        self.name = "Place"
+        self.value = Place
 
-    def setUp(self):
-        """Set up test cases"""
-        self.place = Place()
+    def test_city_id(self):
+        """Checks the type of the city_id attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.city_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_inheritance(self):
-        """Test inheritance"""
-        self.assertIsInstance(self.place, BaseModel)
-        self.assertIsInstance(self.place, Place)
+    def test_user_id(self):
+        """Checks the type of the user_id attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.user_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_attributes(self):
-        """Test attributes"""
-        attributes = [
-            'city_id', 'user_id', 'name', 'description',
-            'number_rooms', 'number_bathrooms', 'max_guest',
-            'price_by_night', 'latitude', 'longitude'
-        ]
-        for attr in attributes:
-            self.assertTrue(hasattr(self.place, attr))
+    def test_name(self):
+        """Checks the type of the name attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-    def test_types(self):
-        """Test attribute types"""
-        self.assertEqual(type(self.place.city_id), str)
-        self.assertEqual(type(self.place.user_id), str)
-        self.assertEqual(type(self.place.name), str)
-        self.assertEqual(type(self.place.description), str)
-        self.assertEqual(type(self.place.number_rooms), int)
-        self.assertEqual(type(self.place.number_bathrooms), int)
-        self.assertEqual(type(self.place.max_guest), int)
-        self.assertEqual(type(self.place.price_by_night), int)
-        self.assertEqual(type(self.place.latitude), float)
-        self.assertEqual(type(self.place.longitude), float)
+    def test_description(self):
+        """Checks the type of the description attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.description),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
+    def test_number_rooms(self):
+        """Checks the type of the number_rooms attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.number_rooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_number_bathrooms(self):
+        """Checks the type of the number_bathrooms attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.number_bathrooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
+
+    def test_max_guest(self):
+        """Checks the type of the max_guest attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.max_guest),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
+
+    def test_price_by_night(self):
+        """Checks the type of the price_by_night attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.price_by_night),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
+
+    def test_latitude(self):
+        """Checks the type of the latitude attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.latitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
+
+    def test_longitude(self):
+        """Checks the type of the longitude attribute."""
+        new = self.value()
+        self.assertEqual(
+            type(new.longitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
+
+    def test_amenity_ids(self):
+        """Checks the type of the amenity_ids attribute."""
+        new = self.value()
+        self.assertEqual(type(new.amenity_ids), list)
