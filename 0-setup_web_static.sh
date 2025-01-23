@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# This script sets up your web servers for the deployment of web_static.
+# Script to set up web servers for the deployment of web_static
 
-# Install Nginx if not already installed
+# Install Nginx if it is not already installed
 if ! command -v nginx &> /dev/null; then
     sudo apt-get update
     sudo apt-get install -y nginx
 fi
 
-# Create the necessary directories
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
+# Create necessary directories
+sudo mkdir -p /data/web_static/releases/test
+sudo mkdir -p /data/web_static/shared
+sudo mkdir -p /data/web_static/releases
 
 # Create a fake HTML file
 echo "<html>
@@ -26,9 +27,19 @@ if [ -L /data/web_static/current ]; then
 fi
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
-# Give ownership of the /data/ folder to the www-data user
-sudo chown -R www-data:www-data /data/
+# Change ownership of the /data/ folder to the ubuntu user and group
+sudo chown -R ubuntu:ubuntu /data/
 
-# Update Nginx configuration to serve the content
-sudo sed -i '/server_name _;/a \\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+# Update Nginx configuration
+echo "server {
+    listen 80;
+    server_name localhost;
+
+    location /hbnb_static {
+        alias /data/web_static/current/;
+        index index.html index.htm;
+    }
+}" | sudo tee /etc/nginx/sites-available/default
+
+# Restart Nginx
 sudo service nginx restart
