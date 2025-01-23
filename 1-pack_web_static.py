@@ -1,16 +1,22 @@
 #!/usr/bin/python3
+# 1-pack_web_static.py
+
 from fabric.api import local
 from datetime import datetime
-import os
 
 def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder."""
-    if not os.path.exists("versions"):
-        local("mkdir versions")
+    try:
+        # Create versions folder if it doesn't exist
+        local("mkdir -p versions")
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_path = f"versions/web_static_{timestamp}.tgz"
+        # Generate archive name using current timestamp
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_name = f"versions/web_static_{timestamp}.tgz"
 
-    local(f"tar -cvzf {archive_path} web_static")
+        # Create the archive
+        local(f"tar -cvzf {archive_name} web_static")
 
-    return archive_path if os.path.exists(archive_path) else None
+        return archive_name
+    except Exception:
+        return None
