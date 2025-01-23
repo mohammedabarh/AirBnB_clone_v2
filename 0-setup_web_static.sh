@@ -1,45 +1,42 @@
 #!/usr/bin/env bash
 # Script to set up web servers for the deployment of web_static
 
-# Install Nginx if it is not already installed
-if ! command -v nginx &> /dev/null; then
-    sudo apt-get update
-    sudo apt-get install -y nginx
-fi
+# Update package list
+sudo apt-get update
 
-# Create necessary directories
-sudo mkdir -p /data/web_static/releases/test
-sudo mkdir -p /data/web_static/shared
-sudo mkdir -p /data/web_static/releases
+# Install Nginx web server
+sudo apt-get -y install nginx
 
-# Create a fake HTML file
+# Allow HTTP traffic through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Create base directory structure for web_static
+sudo mkdir -p /data/
+sudo mkdir -p /data/web_static/
+sudo mkdir -p /data/web_static/releases/
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/
+
+# Create a test HTML file
+sudo touch /data/web_static/releases/test/index.html
+
+# Write a simple HTML page into the test file
 echo "<html>
   <head>
   </head>
   <body>
-    ALX
+    Holberton School
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
 
-# Create a symbolic link
-if [ -L /data/web_static/current ]; then
-    sudo rm /data/web_static/current
-fi
-sudo ln -s /data/web_static/releases/test/ /data/web_static/current
+# Create a symbolic link pointing to the test release
+sudo ln -s -f /data/web_static/releases/test/ /data/web_static/current
 
-# Change ownership of the /data/ folder to the ubuntu user and group
+# Change ownership of the /data/ directory to the ubuntu user
 sudo chown -R ubuntu:ubuntu /data/
 
-# Update Nginx configuration
-echo "server {
-    listen 80;
-    server_name localhost;
+# Update Nginx configuration to serve content from the web_static directory
+sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
 
-    location /hbnb_static {
-        alias /data/web_static/current/;
-        index index.html index.htm;
-    }
-}" | sudo tee /etc/nginx/sites-available/default
-
-# Restart Nginx
+# Restart Nginx to apply changes
 sudo service nginx restart
