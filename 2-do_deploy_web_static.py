@@ -1,39 +1,52 @@
 #!/usr/bin/python3
+"""
+Fabric script to distribute an archive to web servers
+"""
 from fabric.api import env, put, run
 import os
 
-env.hosts = ['<IP_web_01>', '<IP_web_02>']
+env.hosts = ['<IP web-01>', '<IP web-02>']  # Replace with your server IPs
+
 
 def do_deploy(archive_path):
-    """Distributes an archive to the web servers."""
+    """
+    Deploys archive to web servers
+    """
     if not os.path.exists(archive_path):
         return False
 
     try:
-        # Upload the archive to the /tmp/ directory
+        # Get filename and folder name
+        file_name = os.path.basename(archive_path)
+        folder_name = file_name.replace('.tgz', '')
+        
+        # Upload archive to /tmp/
         put(archive_path, '/tmp/')
         
-        # Get the filename without the extension
-        filename = archive_path.split('/')[-1]
-        no_ext = filename.split('.')[0]
+        # Create release directory
+        run('mkdir -p /data/web_static/releases/{}/'.format(folder_name))
         
-        # Create the release directory
-        run(f"mkdir -p /data/web_static/releases/{no_ext}/")
+        # Extract archive
+        run('tar -xzf /tmp/{} -C /data/web_static/releases/{}/'.format(
+            file_name, folder_name))
         
-        # Uncompress the archive
-        run(f"tar -xzf /tmp/{filename} -C /data/web_static/releases/{no_ext}/")
-        run(f"rm /tmp/{filename}")  # Delete the archive from the server
+        # Remove archive
+        run('rm /tmp/{}'.format(file_name))
         
-        # Move files to the correct directory
-        run(f"mv /data/web_static/releases/{no_ext}/web_static/* /data/web_static/releases/{no_ext}/")
-        run(f"rm -rf /data/web_static/releases/{no_ext}/web_static")  # Remove the unneeded folder
+        # Move files to proper location
+        run('mv /data/web_static/releases/{}/web_static/* '
+            '/data/web_static/releases/{}/'.format(folder_name, folder_name))
         
-        # Delete the current symbolic link
-        run("rm -rf /data/web_static/current")
+        # Remove extra web_static directory
+        run('rm -rf /data/web_static/releases/{}/web_static'.format(folder_name))
         
-        # Create a new symbolic link
-        run(f"ln -s /data/web_static/releases/{no_ext}/ /data/web_static/current")
+        # Remove old current symlink
+        run('rm -rf /data/web_static/current')
+        
+        # Create new symlink
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(
+            folder_name))
         
         return True
-    except Exception:
+    except:
         return False
