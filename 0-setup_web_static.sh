@@ -26,8 +26,8 @@ if [ -L /data/web_static/current ]; then
 fi
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
-# Give ownership of the /data/ folder to the ubuntu user
-sudo chown -R ubuntu:ubuntu /data/
+# Give ownership of the /data/ folder to the www-data user
+sudo chown -R www-data:www-data /data/
 
 # Update Nginx configuration to serve the content
 sudo sed -i '/server_name _;/a \\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
