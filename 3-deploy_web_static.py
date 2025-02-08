@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This Fabric script is derived from the file 2-do_deploy_web_static.py. 
+This Fabric script is derived from the file 2-do_deploy_web_static.py.
 It creates and distributes an archive to specified web servers.
 
 To execute, run: fab -f 3-deploy_web_static.py deploy -i ~/.ssh/id_rsa -u ubuntu
