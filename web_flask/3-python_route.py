@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """
 Flask web application with variable rules and defaults
