@@ -1,40 +1,56 @@
 #!/usr/bin/python3
-"""
-Flask web application with odd/even number display
-"""
+"""a script that starts a flask web application"""
 from flask import Flask, render_template
 
 app = Flask(__name__)
 
+
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
-    return 'Hello HBNB!'
+    """a function that prints hello `hbnb at the root"""
+    return "Hello HBNB!"
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    return 'HBNB'
+    """Display HBNB at /hbnb"""
+    return "HBNB"
+
 
 @app.route('/c/<text>', strict_slashes=False)
-def c_text(text):
-    return 'C {}'.format(text.replace('_', ' '))
+def c(text):
+    """display “C ” followed by the value of the text variable
+    (replace underscore _ symbols with a space"""
+    text = text.replace("_", " ")
+    return "C {}".format(text)
 
-@app.route('/python/', strict_slashes=False)
+
+@app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def python_text(text='is cool'):
-    return 'Python {}'.format(text.replace('_', ' '))
+def python(text="is cool"):
+    """ display python followed by the vvalue of the text
+    variable and replaces _ with space"""
+    text = text.replace("_", " ")
+    return f"Python {text}"
+
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
-    return '{} is a number'.format(n)
+    """ display n if it is an integer"""
+    return f"{n} is a number"
+
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n):
-    return render_template('5-number.html', n=n)
+    """ display html page with template"""
+    return render_template("5-number.html", n=n)
+
 
 @app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def number_odd_or_even(n):
-    even_or_odd = 'even' if n % 2 == 0 else 'odd'
-    return render_template('6-number_odd_or_even.html', n=n, even_or_odd=even_or_odd)
+    """ display n only if it is an integer"""
+    return render_template('6-number_odd_or_even.html', n=n)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
